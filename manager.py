@@ -5,7 +5,7 @@ from utils import *
 
 offset          = 50
 width, height   = 800, 800
-
+pygame.font.init()
 class Manager(object):
     size            = (width, height)
     fps             = 60
@@ -19,11 +19,13 @@ class Manager(object):
     LineThickness   = 2
 
     showIndex       = True
-    n_points        = 4
+    n_points        = 5
 
+    PossibleCombinations = Factorial(n_points)
+    print("possible combinations : {}".format(Factorial(n_points)))
     Points          = [Point(randint(offset, width-offset), randint(offset, height-offset)) for i in range(n_points)]
     Order           = [i for i in range(n_points)]
-
+    counter         = 0
     def __init__(self):
         self.recordDistance  = SumDistance(self.Points)
         self.OptimalRoutes          = []
@@ -53,13 +55,24 @@ class Manager(object):
         for i in self.Order:
             nodes.append(self.Points[i])
 
+        self.counter += 1
+
+        if self.counter > self.PossibleCombinations:
+            self.counter = self.PossibleCombinations
+
         dist = SumDistance(nodes)
         if dist < self.recordDistance:
             self.recordDistance = dist
             self.OptimalRoutes  = nodes.copy()
             print("Shortest distance : {}" .format(self.recordDistance))
 
-
+    def Percentage(self):
+        percent = (self.counter/self.PossibleCombinations) * 100
+        textColor   = (255, 255, 255)
+        # textFont    = pg.font.Font("freesansbold.ttf", size)
+        textFont    = pygame.font.SysFont("Arial", 20)
+        textSurface = textFont.render(str(round(percent, 4)), False, textColor)
+        self.screen.blit(textSurface, (width//2, 50))
     def DrawShortestPath(self):
         if len(self.OptimalRoutes) > 0:
             for n in range(self.n_points):

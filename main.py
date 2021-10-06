@@ -30,7 +30,7 @@ while run:
     manager.DrawLines()
     manager.DrawPoints()
     manager.DrawShortestPath()
-
+    manager.Percentage()
 
     pygame.display.flip()
 

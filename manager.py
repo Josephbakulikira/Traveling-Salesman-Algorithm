@@ -19,9 +19,10 @@ class Manager(object):
     LineThickness   = 2
 
     showIndex       = True
-    n_points        = 10
+    n_points        = 4
 
     Points          = [Point(randint(offset, width-offset), randint(offset, height-offset)) for i in range(n_points)]
+    Order           = [i for i in range(n_points)]
 
     def __init__(self):
         self.recordDistance  = SumDistance(self.Points)
@@ -35,7 +36,7 @@ class Manager(object):
         pygame.display.set_caption("Traveling SalesPerson - Fps : {}".format(frameRate))
 
 
-    def BruteForceSolution(self):
+    def BruteForce(self):
         i1 = randint(0, self.n_points-1)
         i2 = randint(0, self.n_points-1)
         self.Points[i1], self.Points[i2] = self.Points[i2], self.Points[i1]
@@ -44,7 +45,20 @@ class Manager(object):
         if dist < self.recordDistance:
             self.recordDistance  = dist
             self.OptimalRoutes   = self.Points.copy()
-            print(self.recordDistance)
+            print("Shortest distance : {}" .format(self.recordDistance))
+
+    def Lexicographic(self):
+        self.Order = LexicalOrder(self.Order)
+        nodes = []
+        for i in self.Order:
+            nodes.append(self.Points[i])
+
+        dist = SumDistance(nodes)
+        if dist < self.recordDistance:
+            self.recordDistance = dist
+            self.OptimalRoutes  = nodes.copy()
+            print("Shortest distance : {}" .format(self.recordDistance))
+
 
     def DrawShortestPath(self):
         if len(self.OptimalRoutes) > 0:

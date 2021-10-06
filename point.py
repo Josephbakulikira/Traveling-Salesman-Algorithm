@@ -30,3 +30,9 @@ class Point:
             textSurface = textFont.render(str(point_index), True, textColor)
             textRectangle = textSurface.get_rect(center=(self.x, self.y))
             manager.screen.blit(textSurface, textRectangle)
+
+    def GetTuple(self):
+        return (self.x, self.y)
+
+    def __repr__(self):
+        return f"{self.x}, {self.y}"

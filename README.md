@@ -10,8 +10,12 @@
 - **T**     node Index
 ---
 ```python:main.py
-manager.BruteForce()
+# Brute force solution , just by using going through all the possible combination 
+# with a random function until we find the shortest distance
+manager.BruteForce() 
+# using Lexicographical order to solve the problem by going in order into all the possible routes
 manager.Lexicographic()
+# using genetic algorithm to find the fittest one
 manager.GeneticAlgorithm()
 
 ```

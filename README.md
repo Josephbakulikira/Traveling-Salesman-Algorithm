@@ -19,3 +19,4 @@ manager.Lexicographic()
 manager.GeneticAlgorithm()
 
 ```
+![Screenshot (227)](https://user-images.githubusercontent.com/48150537/136377539-871a10dc-1a65-4aea-af0e-c528cf433871.png)

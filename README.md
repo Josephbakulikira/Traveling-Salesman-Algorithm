@@ -9,7 +9,9 @@
 - **Esc**   To close the window
 - **T**     node Index
 ---
-\```python:main.py [4-5]
-  
- \```
+\```python:main.py
+  manager.BruteForce()
+  manager.Lexicographic()
+  manager.GeneticAlgorithm()
+\```
 

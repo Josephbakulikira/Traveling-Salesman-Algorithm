@@ -9,8 +9,9 @@
 - **Esc**   To close the window
 - **T**     node Index
 ---
-```python:src/helloworld.py
-def hello():
-    return "v1.0.0 world"
+```python:main.py
+manager.BruteForce()
+manager.Lexicographic()
+manager.GeneticAlgorithm()
 
 ```

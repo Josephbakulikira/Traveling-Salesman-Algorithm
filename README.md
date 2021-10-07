@@ -10,8 +10,8 @@
 - **T**     node Index
 ---
 \```python:main.py
-  manager.BruteForce()
-  manager.Lexicographic()
-  manager.GeneticAlgorithm()
+      manager.BruteForce()
+      manager.Lexicographic()
+      manager.GeneticAlgorithm()
 \```
 

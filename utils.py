@@ -1,4 +1,5 @@
 from math import sqrt
+from random import randint, uniform
 
 def Distance(a, b):
     return sqrt( (b.x-a.x)*(b.x-a.x) + (b.y-a.y)*(b.y-a.y) )
@@ -10,6 +11,15 @@ def SumDistance(points):
         s += dist
     return s
 
+def PickSelection(myList, probabilities):
+    i = 0
+    r = uniform(0, 1)
+
+    while r > 0:
+        r -= probabilities[i]
+        i += 1
+    i -= 1
+    return myList[i].copy()
 def LexicalOrder(orderList):
     x = -1
     y = -1

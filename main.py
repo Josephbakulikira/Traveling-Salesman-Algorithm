@@ -25,9 +25,10 @@ while run:
             if event.key == pygame.K_t:
                 manager.showIndex = not manager.showIndex
 
-    #manager.BruteForce()
-    manager.Lexicographic()
-    manager.DrawLines()
+    # manager.BruteForce()
+    # manager.Lexicographic()
+    manager.GeneticAlgorithm()
+
     manager.DrawPoints()
     manager.DrawShortestPath()
     manager.Percentage()

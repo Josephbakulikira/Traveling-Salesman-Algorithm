@@ -7,12 +7,11 @@ pygame.init()
 
 manager = Manager()
 
-q = 3
 
 run = True
 while run:
     manager.Background()
-    manager.SetFps()
+    delta_time = manager.SetFps()
     manager.UpdateCaption()
 
     # handle Events
@@ -25,6 +24,8 @@ while run:
             if event.key == pygame.K_t:
                 manager.showIndex = not manager.showIndex
 
+    # Choose one method between the 3 below: bruteForce, lexicagraphic order, genetic algorithm
+    
     # manager.BruteForce()
     # manager.Lexicographic()
     manager.GeneticAlgorithm()

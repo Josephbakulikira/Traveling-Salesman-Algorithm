@@ -43,7 +43,7 @@ def LexicalOrder(orderList):
     RightSidereversed = orderList[x+1:][::-1]
     orderList = orderList[:x+1]
     orderList.extend(RightSidereversed)
-    print(orderList)
+    # print(orderList)
 
     return orderList
 

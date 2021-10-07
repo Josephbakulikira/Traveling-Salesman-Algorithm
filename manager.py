@@ -40,7 +40,7 @@ class Manager(object):
         self.OptimalRoutes   = self.Points.copy()
         self.currentList     = self.Points.copy()
     def SetFps(self):
-        self.clock.tick(self.fps)
+        return self.clock.tick(self.fps)/1000.0
 
     def UpdateCaption(self):
         frameRate = int(self.clock.get_fps())

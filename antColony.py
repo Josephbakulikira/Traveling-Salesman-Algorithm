@@ -1,5 +1,10 @@
 import pygame
 from ant import *
+pygame.font.init()
+textColor   = (0, 0, 0)
+# textFont    = pg.font.Font("freesansbold.ttf", size)
+textFont    = pygame.font.SysFont("Arial", 20)
+
 class AntColony(object):
     def __init__(self, variation="ACS", size=5, elitist_weight=1.0, minFactor=0.001, alpha=1.0, beta=3.0,
                  rho=0.1, phe_deposit_weight=1.0, pheromone=1.0, max_iterations=100, nodes=None, labels=None):
@@ -125,9 +130,14 @@ class AntColony(object):
                         pygame.draw.line(manager.screen, (r, g, b), self.nodes[e.a].GetTuple(), self.nodes[e.b].GetTuple(), 1)
 
         # Draw Best Routes
-        for i in range(len(self.best_tour)-1):
+        for i in range(len(self.best_tour)):
             a = self.nodes[self.best_tour[i]]
             b = self.nodes[self.best_tour[(i+1) % len(self.best_tour)]]
             pygame.draw.line(manager.screen, manager.Highlight, a.GetTuple(), b.GetTuple(), manager.LineThickness)
         for node in self.nodes:
             pygame.draw.circle(manager.screen, manager.White, node.GetTuple(), manager.scaler)
+
+        for i in self.best_tour:
+            textSurface = textFont.render(str(i), True, textColor)
+            textRectangle = textSurface.get_rect(center=(self.nodes[self.best_tour[i]].x, self.nodes[self.best_tour[i]].y))
+            manager.screen.blit(textSurface, textRectangle)

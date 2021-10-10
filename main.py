@@ -12,7 +12,7 @@ antColonyTypes = ["ACS", "ELITIST", "MAX-MIN"]
 
 selectedIndex = 2
 
-pause = True
+pause = False
 started = False
 rightMouseClicked = False
 GenerateToggle = False
@@ -86,11 +86,20 @@ while run:
 
         pause = PauseButton.state
         reset = ResetButton.state
+
         if reset == True:
             reset = False
             ResetButton.state = False
-            manager = Manager()
+            temp = manager.Points
+            manager = Manager(temp)
+
+            manager.ResetAntColony(manager.antColony.variation)
+
         GenerateToggle = RandomButton.state
+        if GenerateToggle == True:
+            manager.RandomPoints()
+            GenerateToggle = False
+            RandomButton.state = False
 
         if pause == True:
             PauseButton.text = "Continue"

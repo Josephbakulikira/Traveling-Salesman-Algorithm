@@ -9,8 +9,8 @@ from ant import *
 offset          = 100
 width, height   = 1920, 1080
 populationSize  = 300
-n = 10
-colony_size = 30
+n = 20
+colony_size = 10
 iterations = 100
 pygame.font.init()
 
@@ -34,11 +34,12 @@ class Manager(object):
 
     PossibleCombinations = Factorial(n_points)
     # print("possible combinations : {}".format(Factorial(n_points)))
-    Points          = [Point(randint(offset, width-offset), randint(offset, height-offset)) for i in range(n_points)]
+
     Order           = [i for i in range(n_points)]
     counter         = 0
 
-    def __init__(self):
+    def __init__(self, Points = [Point(randint(offset, width-offset), randint(offset, height-offset)) for i in range(n_points)]):
+        self.Points          = Points
         self.recordDistance  = SumDistance(self.Points)
         self.OptimalRoutes   = self.Points.copy()
         self.currentList     = self.Points.copy()
@@ -123,6 +124,12 @@ class Manager(object):
         self.antColony.Draw(self)
         self.recordDistance = self.antColony.best_distance
 
+    def RandomPoints(self):
+        self.Points = [Point(randint(offset, width-offset), randint(offset, height-offset)) for i in range(self.n_points)]
+        self.ResetAntColony(self.antColony.variation)
+        self.recordDistance  = SumDistance(self.Points)
+        self.OptimalRoutes   = self.Points.copy()
+        self.currentList     = self.Points.copy()
     def Percentage(self, val):
         percent = (self.counter/val) * 100
         textColor   = (255, 255, 255)

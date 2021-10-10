@@ -7,14 +7,13 @@ from antColony import *
 from ant import *
 
 offset          = 100
-width, height   = 800, 800
+width, height   = 1920, 1080
 populationSize  = 300
-
 n = 10
 colony_size = 30
 iterations = 100
-
 pygame.font.init()
+
 class Manager(object):
     size            = (width, height)
     fps             = 30
@@ -28,14 +27,12 @@ class Manager(object):
     Gray            = (100, 100, 100)
     Highlight       = (255, 255, 0)
     LineThickness   = 4
-
     showIndex       = True
     n_points        = n
-
+    algorithms        = ["Brute Force", "Lexicographic Order", "Genetic Algorithm", "Ant Colony Optimization"]
     genetic         = Genetic([sample(list(range(n)), n) for i in range(populationSize)], populationSize)
 
     PossibleCombinations = Factorial(n_points)
-
     # print("possible combinations : {}".format(Factorial(n_points)))
     Points          = [Point(randint(offset, width-offset), randint(offset, height-offset)) for i in range(n_points)]
     Order           = [i for i in range(n_points)]
@@ -61,7 +58,7 @@ class Manager(object):
 
     def UpdateCaption(self):
         frameRate = int(self.clock.get_fps())
-        pygame.display.set_caption("Traveling SalesPerson - Fps : {}".format(frameRate))
+        pygame.display.set_caption("Traveling Salesman Problem - Fps : {}".format(frameRate))
 
     def Counter(self):
         self.counter += 1
@@ -80,7 +77,7 @@ class Manager(object):
         if dist < self.recordDistance:
             self.recordDistance  = dist
             self.OptimalRoutes   = self.Points.copy()
-            print("Shortest distance : {}" .format(self.recordDistance))
+            #print("Shortest distance : {}" .format(self.recordDistance))
 
         self.DrawLines()
     def Lexicographic(self):
@@ -95,7 +92,7 @@ class Manager(object):
         if dist < self.recordDistance:
             self.recordDistance = dist
             self.OptimalRoutes  = nodes.copy()
-            print("Shortest distance : {}" .format(self.recordDistance))
+            #print("Shortest distance : {}" .format(self.recordDistance))
         self.DrawLines()
 
     def GeneticAlgorithm(self):
@@ -114,13 +111,14 @@ class Manager(object):
 
         self.DrawLines(True)
 
-    def AntColonyOptimization(self):
-        self.counter += 1
-        if self.counter > self.antColony.max_iterations:
-            self.counter = self.antColony.max_iterations
+    def AntColonyOptimization(self, pause):
+        if pause == False:
+            self.counter += 1
+            if self.counter > self.antColony.max_iterations:
+                self.counter = self.antColony.max_iterations
 
-        if self.counter < self.antColony.max_iterations:
-            self.antColony.Simulate(self.counter)
+            if self.counter < self.antColony.max_iterations:
+                self.antColony.Simulate(self.counter)
 
         self.antColony.Draw(self)
         self.recordDistance = self.antColony.best_distance
@@ -133,12 +131,17 @@ class Manager(object):
         textSurface = textFont.render(str(round(percent, 4)), False, textColor)
         self.screen.blit(textSurface, (width//2, 50))
 
-    def ShowTextDistance(self):
+    def ShowText(self, selectedIndex):
         textColor   = (255, 255, 255)
         # textFont    = pg.font.Font("freesansbold.ttf", size)
         textFont    = pygame.font.SysFont("Times", 20)
-        textSurface = textFont.render("Best distance : " + str(round(self.recordDistance,2)), False, textColor)
-        self.screen.blit(textSurface, (100, 50))
+        textSurface1 = textFont.render("Best distance : " + str(round(self.recordDistance,2)), False, textColor)
+        textSurface2 = textFont.render(self.algorithms[selectedIndex], False, textColor)
+
+        self.screen.blit(textSurface1, (100, 70))
+        self.screen.blit(textSurface2, (100, 35))
+
+
     def DrawShortestPath(self):
         if len(self.OptimalRoutes) > 0:
             for n in range(self.n_points):
@@ -151,7 +154,7 @@ class Manager(object):
 
     def DrawPoints(self, selected_index = 0):
         for point in self.Points:
-            point.radius = manager.scaler
+            point.radius = self.scaler
             point.Draw(self)
 
     def DrawLines(self, drawCurrent=False):

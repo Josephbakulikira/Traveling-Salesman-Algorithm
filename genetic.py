@@ -27,7 +27,7 @@ class Genetic:
                 self.record = dist
                 self.fitest = self.population[i]
                 self.fitestIndex = i
-                print(f"Shortest distance: {dist}")
+                #print(f"Shortest distance: {dist}")
             self.fitness[i] = 1/ (dist+1)
         self.NormalizeFitnesss()
 

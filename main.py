@@ -7,11 +7,15 @@ pygame.init()
 
 manager = Manager()
 manager.ChangeAntColonyVariation("ELITIST")
-selectedIndex = 3
+selectedIndex = 2
+
+pause = True
+started = False
 
 run = True
 while run:
     manager.Background()
+
     delta_time = manager.SetFps()
     manager.UpdateCaption()
 
@@ -22,30 +26,34 @@ while run:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 run = False
-            if event.key == pygame.K_t:
-                manager.showIndex = not manager.showIndex
+            if event.key == pygame.K_SPACE:
+                pause = not pause
 
     # Choose one method between the 3 below: bruteForce, lexicagraphic order, genetic algorithm
-
+    started = True
     if selectedIndex == 0:
-        manager.BruteForce()
+        if pause == False:
+            manager.BruteForce()
         manager.DrawPoints()
         manager.DrawShortestPath()
         manager.Percentage(manager.PossibleCombinations)
     elif selectedIndex == 1:
-        manager.Lexicographic()
+        if pause == False:
+            manager.Lexicographic()
         manager.DrawPoints()
         manager.DrawShortestPath()
         manager.Percentage(manager.PossibleCombinations)
     elif selectedIndex == 2:
-        manager.GeneticAlgorithm()
+        if pause == False:
+            manager.GeneticAlgorithm()
         manager.DrawPoints()
         manager.DrawShortestPath()
     elif selectedIndex == 3:
-        manager.AntColonyOptimization()
+        manager.AntColonyOptimization(pause)
         manager.Percentage(iterations)
 
-    manager.ShowTextDistance()
+
+    manager.ShowText(selectedIndex)
 
     # point scale animation increment
     manager.scaler += 1

@@ -3,11 +3,16 @@ from random import randint, sample
 from point import Point
 from utils import *
 from genetic import Genetic
+from antColony import *
+from ant import *
 
-offset          = 50
+offset          = 100
 width, height   = 800, 800
 populationSize  = 300
+
 n = 10
+colony_size = 30
+iterations = 100
 
 pygame.font.init()
 class Manager(object):
@@ -15,13 +20,14 @@ class Manager(object):
     fps             = 30
     screen          = pygame.display.set_mode(size)
     clock           = pygame.time.Clock()
-
+    scaler          = 1
+    max_radius      = 15
     Black           = (0, 0, 0)
     White           = (255, 255, 255)
     Yellow          = (255, 255, 0)
     Gray            = (100, 100, 100)
-    Highlight       = (80, 170, 120)
-    LineThickness   = 2
+    Highlight       = (255, 255, 0)
+    LineThickness   = 4
 
     showIndex       = True
     n_points        = n
@@ -39,6 +45,17 @@ class Manager(object):
         self.recordDistance  = SumDistance(self.Points)
         self.OptimalRoutes   = self.Points.copy()
         self.currentList     = self.Points.copy()
+
+        # --- Ant Colony ---
+        self.antColony = AntColony(variation="ACS", size=colony_size, max_iterations = iterations,
+                         nodes=self.Points.copy(), alpha=1, beta=3, rho=0.1, pheromone=1, phe_deposit_weight=1)
+
+    def ChangeAntColonyVariation(self, name):
+        self.antColony.variation = name
+
+    def ResetAntColony(self, name="ACS"):
+        self.antColony = AntColony(variation=name, size=colony_size, max_iterations = iterations,
+                         nodes=self.Points.copy(), alpha=1, beta=3, rho=0.1, pheromone=1, phe_deposit_weight=1)
     def SetFps(self):
         return self.clock.tick(self.fps)/1000.0
 
@@ -80,6 +97,7 @@ class Manager(object):
             self.OptimalRoutes  = nodes.copy()
             print("Shortest distance : {}" .format(self.recordDistance))
         self.DrawLines()
+
     def GeneticAlgorithm(self):
         self.genetic.CalculateFitness(self.Points)
         self.genetic.NaturalSelection()
@@ -92,18 +110,35 @@ class Manager(object):
                 self.OptimalRoutes[i] = self.Points[self.genetic.fitest[i]]
             self.recordDistance = self.genetic.record
 
-
         # print(self.OptimalRoutes)
 
         self.DrawLines(True)
-    def Percentage(self):
-        percent = (self.counter/self.PossibleCombinations) * 100
+
+    def AntColonyOptimization(self):
+        self.counter += 1
+        if self.counter > self.antColony.max_iterations:
+            self.counter = self.antColony.max_iterations
+
+        if self.counter < self.antColony.max_iterations:
+            self.antColony.Simulate(self.counter)
+
+        self.antColony.Draw(self)
+        self.recordDistance = self.antColony.best_distance
+
+    def Percentage(self, val):
+        percent = (self.counter/val) * 100
         textColor   = (255, 255, 255)
         # textFont    = pg.font.Font("freesansbold.ttf", size)
         textFont    = pygame.font.SysFont("Arial", 20)
         textSurface = textFont.render(str(round(percent, 4)), False, textColor)
         self.screen.blit(textSurface, (width//2, 50))
 
+    def ShowTextDistance(self):
+        textColor   = (255, 255, 255)
+        # textFont    = pg.font.Font("freesansbold.ttf", size)
+        textFont    = pygame.font.SysFont("Times", 20)
+        textSurface = textFont.render("Best distance : " + str(round(self.recordDistance,2)), False, textColor)
+        self.screen.blit(textSurface, (100, 50))
     def DrawShortestPath(self):
         if len(self.OptimalRoutes) > 0:
             for n in range(self.n_points):
@@ -113,19 +148,21 @@ class Manager(object):
                                     (self.OptimalRoutes[n+1].x, self.OptimalRoutes[n+1].y),
                                     self.LineThickness)
                 self.OptimalRoutes[n].Draw(self, self.showIndex, True, n)
-    def DrawPoints(self):
+
+    def DrawPoints(self, selected_index = 0):
         for point in self.Points:
+            point.radius = manager.scaler
             point.Draw(self)
 
     def DrawLines(self, drawCurrent=False):
         if drawCurrent == True:
             for i, point in enumerate(self.currentList):
                 if i+1 < self.n_points:
-                        pygame.draw.line(self.screen, self.Gray, (point.x, point.y), (self.currentList[i+1].x, self.currentList[i+1].y), self.LineThickness)
+                        pygame.draw.line(self.screen, self.Gray, (point.x, point.y), (self.currentList[i+1].x, self.currentList[i+1].y), 1)
         else:
             for i, point in enumerate(self.Points):
                 if i+1 < self.n_points:
-                        pygame.draw.line(self.screen, self.Gray, (point.x, point.y), (self.Points[i+1].x, self.Points[i+1].y), self.LineThickness)
+                        pygame.draw.line(self.screen, self.Gray, (point.x, point.y), (self.Points[i+1].x, self.Points[i+1].y), 1)
 
     def Background(self):
         self.screen.fill(self.Black)

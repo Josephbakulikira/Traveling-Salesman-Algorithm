@@ -1,7 +1,7 @@
 import pygame
 
 pygame.font.init()
-textColor   = (255, 255, 255)
+textColor   = (0, 0, 0)
 # textFont    = pg.font.Font("freesansbold.ttf", size)
 textFont    = pygame.font.SysFont("Arial", 20)
 
@@ -9,20 +9,17 @@ class Point:
     def __init__(self, x, y):
         self.x      = x
         self.y      = y
-        self.radius = 20
+        self.radius = 1
         self.alpha  = 150
 
     def Draw(self, manager, showIndex=False, highlight=False, point_index=0):
         surface = pygame.Surface((self.radius *2, self.radius*2), pygame.SRCALPHA, 32)
 
         if highlight:
-            r, g, b = manager.Highlight
+            r, g, b = manager.White
             pygame.draw.circle(surface, (r, g, b, 255), (self.radius, self.radius), self.radius)
             pygame.draw.circle(surface, (r, g, b, 255), (self.radius, self.radius), self.radius, 1)
-        else:
-            r, g, b = manager.White
-            pygame.draw.circle(surface, (r, g, b, self.alpha), (self.radius, self.radius), self.radius)
-            pygame.draw.circle(surface, (r, g, b, 255), (self.radius, self.radius), self.radius, 1)
+
 
         manager.screen.blit(surface, (int(self.x-self.radius), int(self.y-self.radius)))
 

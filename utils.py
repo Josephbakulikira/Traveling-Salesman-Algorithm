@@ -20,6 +20,7 @@ def PickSelection(myList, probabilities):
         i += 1
     i -= 1
     return myList[i].copy()
+    
 def LexicalOrder(orderList):
     x = -1
     y = -1

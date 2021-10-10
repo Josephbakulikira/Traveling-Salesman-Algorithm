@@ -1,6 +1,11 @@
 # Traveling-Salesman-Algorithm
  Subscribe to My youtube Channel : [Auctux](https://www.youtube.com/c/Auctux)
-
+ ---
+ Traveling Salesman using 4 algorithms:
+ - Brute force
+ - Lexicographical order
+ - genetic algorithm
+ - Ant Colony optimization (Elitist, MaxMin)
 ## Requirements
 > **Pygame** : pip install pygame
 

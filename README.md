@@ -17,6 +17,7 @@ manager.BruteForce()
 manager.Lexicographic()
 # using genetic algorithm to find the fittest one
 manager.GeneticAlgorithm()
+# using AntColonyOptimization(name:String) 
+manager.AntColonyOptimization("ACS") # or "ELITIST" or "MAX-MIN"
 
 ```
-![Screenshot (227)](https://user-images.githubusercontent.com/48150537/136377539-871a10dc-1a65-4aea-af0e-c528cf433871.png)

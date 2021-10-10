@@ -2,16 +2,27 @@ import pygame
 from point import *
 from manager import *
 from random import randint
+from UI.setup import *
 
 pygame.init()
 
 manager = Manager()
-manager.ChangeAntColonyVariation("ELITIST")
+antColonyTypes = ["ACS", "ELITIST", "MAX-MIN"]
+# manager.ChangeAntColonyVariation("ELITIST")
+
 selectedIndex = 2
 
 pause = True
 started = False
+rightMouseClicked = False
+GenerateToggle = False
+reset = False
 
+PauseButton.state = pause
+ResetButton.state = reset
+RandomButton.state = GenerateToggle
+
+showUI = False
 run = True
 while run:
     manager.Background()
@@ -28,6 +39,12 @@ while run:
                 run = False
             if event.key == pygame.K_SPACE:
                 pause = not pause
+            if event.key == pygame.K_RETURN:
+                showUI = not showUI
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                rightMouseClicked = True
+
 
     # Choose one method between the 3 below: bruteForce, lexicagraphic order, genetic algorithm
     started = True
@@ -48,12 +65,41 @@ while run:
             manager.GeneticAlgorithm()
         manager.DrawPoints()
         manager.DrawShortestPath()
-    elif selectedIndex == 3:
+    else:
         manager.AntColonyOptimization(pause)
+        # print(selectedIndex-3)
+        manager.ChangeAntColonyVariation(antColonyTypes[selectedIndex-3])
         manager.Percentage(iterations)
 
-
     manager.ShowText(selectedIndex)
+
+    # UI
+    if showUI:
+        panel.Render(manager.screen)
+        AlgorithmChoice.Render(manager.screen, rightMouseClicked)
+        if pause != PauseButton.state:
+            PauseButton.state = pause
+
+        PauseButton.Render(manager.screen, rightMouseClicked)
+        ResetButton.Render(manager.screen, rightMouseClicked)
+        RandomButton.Render(manager.screen, rightMouseClicked)
+
+        pause = PauseButton.state
+        reset = ResetButton.state
+        if reset == True:
+            reset = False
+            ResetButton.state = False
+            manager = Manager()
+        GenerateToggle = RandomButton.state
+
+        if pause == True:
+            PauseButton.text = "Continue"
+        else:
+            PauseButton.text = "Pause"
+
+        if rightMouseClicked:
+            selectedIndex = AlgorithmChoice.currentIndex
+
 
     # point scale animation increment
     manager.scaler += 1
@@ -61,5 +107,5 @@ while run:
         manager.scaler = manager.max_radius
 
     pygame.display.flip()
-
+    rightMouseClicked = False
 pygame.quit()

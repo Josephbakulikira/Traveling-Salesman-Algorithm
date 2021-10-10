@@ -29,7 +29,7 @@ class Manager(object):
     LineThickness   = 4
     showIndex       = True
     n_points        = n
-    algorithms        = ["Brute Force", "Lexicographic Order", "Genetic Algorithm", "Ant Colony Optimization"]
+    algorithms        = ["Brute Force", "Lexicographic Order", "Genetic Algorithm", "Ant Colony ACS", "Ant Colony Elitist", "Ant Colony Max-Min"]
     genetic         = Genetic([sample(list(range(n)), n) for i in range(populationSize)], populationSize)
 
     PossibleCombinations = Factorial(n_points)
@@ -136,9 +136,9 @@ class Manager(object):
         # textFont    = pg.font.Font("freesansbold.ttf", size)
         textFont    = pygame.font.SysFont("Times", 20)
         textSurface1 = textFont.render("Best distance : " + str(round(self.recordDistance,2)), False, textColor)
-        textSurface2 = textFont.render(self.algorithms[selectedIndex], False, textColor)
-
         self.screen.blit(textSurface1, (100, 70))
+
+        textSurface2 = textFont.render(self.algorithms[selectedIndex], False, textColor)
         self.screen.blit(textSurface2, (100, 35))
 
 

@@ -21,3 +21,7 @@ manager.GeneticAlgorithm()
 manager.AntColonyOptimization("ACS") # or "ELITIST" or "MAX-MIN"
 
 ```
+---
+
+![Screenshot (240)](https://user-images.githubusercontent.com/48150537/136697477-262bc770-9986-44ba-9441-7ea6964fb487.png)
+![Screenshot (241)](https://user-images.githubusercontent.com/48150537/136697483-3936c2de-323b-474a-95f8-7976a9447a96.png)

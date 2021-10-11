@@ -3,6 +3,7 @@ from point import *
 from manager import *
 from random import randint
 from UI.setup import *
+from utils import SumDistance
 
 pygame.init()
 
@@ -12,7 +13,7 @@ antColonyTypes = ["ACS", "ELITIST", "MAX-MIN"]
 
 selectedIndex = 2
 
-pause = False
+pause = True
 started = False
 rightMouseClicked = False
 GenerateToggle = False
@@ -39,15 +40,16 @@ while run:
                 run = False
             if event.key == pygame.K_SPACE:
                 pause = not pause
+                started = True
             if event.key == pygame.K_RETURN:
                 showUI = not showUI
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 rightMouseClicked = True
 
 
     # Choose one method between the 3 below: bruteForce, lexicagraphic order, genetic algorithm
-    started = True
     if selectedIndex == 0:
         if pause == False:
             manager.BruteForce()
@@ -71,7 +73,7 @@ while run:
         manager.ChangeAntColonyVariation(antColonyTypes[selectedIndex-3])
         manager.Percentage(iterations)
 
-    manager.ShowText(selectedIndex)
+    manager.ShowText(selectedIndex, started)
 
     # UI
     if showUI:
@@ -90,10 +92,12 @@ while run:
         if reset == True:
             reset = False
             ResetButton.state = False
-            temp = manager.Points
+            temp = manager.Points.copy()
             manager = Manager(temp)
-
+            manager.OptimalRoutes = manager.Points.copy()
+            manager.recordDistance = SumDistance(manager.Points)
             manager.ResetAntColony(manager.antColony.variation)
+            manager.ResetGenetic()
 
         GenerateToggle = RandomButton.state
         if GenerateToggle == True:

@@ -9,7 +9,7 @@ from ant import *
 offset          = 100
 width, height   = 1920, 1080
 populationSize  = 300
-n = 20
+n = 10
 colony_size = 10
 iterations = 100
 pygame.font.init()
@@ -48,10 +48,14 @@ class Manager(object):
         self.antColony = AntColony(variation="ACS", size=colony_size, max_iterations = iterations,
                          nodes=self.Points.copy(), alpha=1, beta=3, rho=0.1, pheromone=1, phe_deposit_weight=1)
 
+    def ResetGenetic(self):
+        self.genetic = Genetic([sample(list(range(n)), n) for i in range(populationSize)], populationSize)
+
     def ChangeAntColonyVariation(self, name):
         self.antColony.variation = name
 
     def ResetAntColony(self, name="ACS"):
+        self.recordDistance  = SumDistance(self.Points)
         self.antColony = AntColony(variation=name, size=colony_size, max_iterations = iterations,
                          nodes=self.Points.copy(), alpha=1, beta=3, rho=0.1, pheromone=1, phe_deposit_weight=1)
     def SetFps(self):
@@ -138,25 +142,29 @@ class Manager(object):
         textSurface = textFont.render(str(round(percent, 4)), False, textColor)
         self.screen.blit(textSurface, (width//2, 50))
 
-    def ShowText(self, selectedIndex):
+    def ShowText(self, selectedIndex, started = True):
         textColor   = (255, 255, 255)
         # textFont    = pg.font.Font("freesansbold.ttf", size)
         textFont    = pygame.font.SysFont("Times", 20)
+        textFont2    = pygame.font.SysFont("Arial Black", 40)
+
         textSurface1 = textFont.render("Best distance : " + str(round(self.recordDistance,2)), False, textColor)
-        self.screen.blit(textSurface1, (100, 70))
-
         textSurface2 = textFont.render(self.algorithms[selectedIndex], False, textColor)
-        self.screen.blit(textSurface2, (100, 35))
+        textSurface3 = textFont2.render("... Press ' SPACE ' to start ..." ,False, textColor)
 
+        self.screen.blit(textSurface1, (100, 70))
+        self.screen.blit(textSurface2, (100, 35))
+        if started == False:
+            self.screen.blit(textSurface3, (width//2, height-200))
 
     def DrawShortestPath(self):
         if len(self.OptimalRoutes) > 0:
             for n in range(self.n_points):
-                if n+1 < self.n_points:
-                    pygame.draw.line(self.screen, self.Highlight,
-                                    (self.OptimalRoutes[n].x, self.OptimalRoutes[n].y),
-                                    (self.OptimalRoutes[n+1].x, self.OptimalRoutes[n+1].y),
-                                    self.LineThickness)
+                _i = (n+1)%self.n_points
+                pygame.draw.line(self.screen, self.Highlight,
+                                (self.OptimalRoutes[n].x, self.OptimalRoutes[n].y),
+                                (self.OptimalRoutes[_i].x, self.OptimalRoutes[_i].y),
+                                self.LineThickness)
                 self.OptimalRoutes[n].Draw(self, self.showIndex, True, n)
 
     def DrawPoints(self, selected_index = 0):
@@ -167,12 +175,12 @@ class Manager(object):
     def DrawLines(self, drawCurrent=False):
         if drawCurrent == True:
             for i, point in enumerate(self.currentList):
-                if i+1 < self.n_points:
-                        pygame.draw.line(self.screen, self.Gray, (point.x, point.y), (self.currentList[i+1].x, self.currentList[i+1].y), 1)
+                _i = (i+1)%len(self.currentList)
+                pygame.draw.line(self.screen, self.Gray, (point.x, point.y), (self.currentList[_i].x, self.currentList[_i].y), 1)
         else:
             for i, point in enumerate(self.Points):
-                if i+1 < self.n_points:
-                        pygame.draw.line(self.screen, self.Gray, (point.x, point.y), (self.Points[i+1].x, self.Points[i+1].y), 1)
+                _i = (i+1)%len(self.Points)
+                pygame.draw.line(self.screen, self.Gray, (point.x, point.y), (self.Points[_i].x, self.Points[_i].y), 1)
 
     def Background(self):
         self.screen.fill(self.Black)

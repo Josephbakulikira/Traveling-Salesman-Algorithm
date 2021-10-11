@@ -6,8 +6,8 @@ def Distance(a, b):
 
 def SumDistance(points):
     s = 0
-    for i in range(len(points)-1):
-        dist = Distance(points[i], points[i+1])
+    for i in range(len(points)):
+        dist = Distance(points[i], points[(i+1) % len(points)])
         s += dist
     return s
 
@@ -20,15 +20,15 @@ def PickSelection(myList, probabilities):
         i += 1
     i -= 1
     return myList[i].copy()
-    
+
 def LexicalOrder(orderList):
     x = -1
     y = -1
 
     # Step 1 : Find the largest x such that Order[x]<Order[x+1]
     # (If there is no such x, Order is the last permutation.)
-    for i in range(len(orderList)-1):
-        if orderList[i] < orderList[i+1]:
+    for i in range(len(orderList)):
+        if orderList[i] < orderList[(i+1)%len(orderList)]:
             x = i
     if x == -1:
         return orderList

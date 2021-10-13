@@ -1,9 +1,10 @@
 # Traveling-Salesman-Algorithm
  Subscribe to My youtube Channel : [Auctux](https://www.youtube.com/c/Auctux)
  ---
- Traveling Salesman using 4 algorithms:
+ Traveling Salesman using 3 algorithms:
  - Brute force
- - Lexicographical order
+  . Lexicographical order
+  
  - genetic algorithm
  - Ant Colony optimization (Elitist, MaxMin)
 ## Requirements

@@ -55,7 +55,7 @@ while run:
             manager.BruteForce()
         manager.DrawPoints()
         manager.DrawShortestPath()
-        manager.Percentage(manager.PossibleCombinations)
+        # manager.Percentage(manager.PossibleCombinations)
     elif selectedIndex == 1:
         if pause == False:
             manager.Lexicographic()

@@ -76,7 +76,7 @@ class Manager(object):
             i2 = randint(0, self.n_points-1)
             self.Points[i1], self.Points[i2] = self.Points[i2], self.Points[i1]
 
-        self.Counter()
+        # self.Counter()
 
         dist = SumDistance(self.Points)
         if dist < self.recordDistance:

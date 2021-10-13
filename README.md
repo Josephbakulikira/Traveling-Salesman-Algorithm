@@ -3,10 +3,12 @@
  ---
  Traveling Salesman using 3 algorithms:
  - Brute force
-  . Lexicographical order
-  
+   - Random
+   - Lexicographical order
  - genetic algorithm
- - Ant Colony optimization (Elitist, MaxMin)
+ - Ant Colony optimization
+   - Elitist
+   - Max-Min
 ## Requirements
 > **Pygame** : pip install pygame
 

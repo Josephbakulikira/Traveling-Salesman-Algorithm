@@ -1,5 +1,6 @@
 import pygame
 from ant import *
+from utils import translateValue
 pygame.font.init()
 textColor   = (0, 0, 0)
 # textFont    = pg.font.Font("freesansbold.ttf", size)
@@ -115,25 +116,28 @@ class AntColony(object):
             self.MAX_MIN(counter)
 
     def Draw(self, manager):
+        # Draw Best Routes
+        for i in range(len(self.best_tour)):
+            a = self.nodes[self.best_tour[i]]
+            b = self.nodes[self.best_tour[(i+1) % len(self.best_tour)]]
+            pygame.draw.line(manager.screen, manager.Highlight, a.GetTuple(), b.GetTuple(), manager.LineThickness)
         # Draw Pheromones
         if self.variation == "MAX-MIN":
             for ant in self.ants:
                 for edge in ant.edges:
                     for e in edge:
                         r = g = b = int(min((e.pheromone)*math.pow(10, 5), 255))
-                        pygame.draw.line(manager.screen, (r, g, b), self.nodes[e.a].GetTuple(), self.nodes[e.b].GetTuple(), 1)
+                        thickness = int(translateValue(e.pheromone, 0, 255, 1, 8))
+                        pygame.draw.line(manager.screen, (r, g, 0), self.nodes[e.a].GetTuple(), self.nodes[e.b].GetTuple(), thickness)
         else:
             for ant in self.ants:
                 for edge in ant.edges:
                     for e in edge:
                         r = g = b = int(min((e.pheromone)*2, 255))
-                        pygame.draw.line(manager.screen, (r, g, b), self.nodes[e.a].GetTuple(), self.nodes[e.b].GetTuple(), 1)
+                        thickness = int(translateValue(e.pheromone, 0, 255, 1, 8))
+                        pygame.draw.line(manager.screen, (r, g, 0), self.nodes[e.a].GetTuple(), self.nodes[e.b].GetTuple(), thickness)
 
-        # Draw Best Routes
-        for i in range(len(self.best_tour)):
-            a = self.nodes[self.best_tour[i]]
-            b = self.nodes[self.best_tour[(i+1) % len(self.best_tour)]]
-            pygame.draw.line(manager.screen, manager.Highlight, a.GetTuple(), b.GetTuple(), manager.LineThickness)
+
         for node in self.nodes:
             pygame.draw.circle(manager.screen, manager.White, node.GetTuple(), manager.scaler)
 

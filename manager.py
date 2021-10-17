@@ -1,4 +1,5 @@
 import pygame
+import random
 from random import randint, sample
 from point import Point
 from utils import *
@@ -9,9 +10,9 @@ from ant import *
 offset          = 100
 width, height   = 1920, 1080
 populationSize  = 300
-n = 10
+n = 15
 colony_size = 10
-iterations = 100
+iterations = 300
 pygame.font.init()
 
 class Manager(object):
@@ -30,6 +31,7 @@ class Manager(object):
     showIndex       = True
     n_points        = n
     algorithms        = ["Brute Force", "Lexicographic Order", "Genetic Algorithm", "Ant Colony ACS", "Ant Colony Elitist", "Ant Colony Max-Min"]
+
     genetic         = Genetic([sample(list(range(n)), n) for i in range(populationSize)], populationSize)
 
     PossibleCombinations = Factorial(n_points)
@@ -134,6 +136,7 @@ class Manager(object):
         self.recordDistance  = SumDistance(self.Points)
         self.OptimalRoutes   = self.Points.copy()
         self.currentList     = self.Points.copy()
+
     def Percentage(self, val):
         percent = (self.counter/val) * 100
         textColor   = (255, 255, 255)
